@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="930" viewBox="0 0 1200 930" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+    <marker id="o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ea580c"/></marker>
+    <style>
+      .t{font-size:13px;font-weight:700;fill:#0f172a}
+      .s{font-size:11px;fill:#334155}
+      .m{font-size:10.5px;fill:#475569;font-family:Consolas, Menlo, monospace}
+      .h{font-size:12px;font-weight:700;fill:#64748b;letter-spacing:.08em}
+      .ui{fill:#eff6ff;stroke:#3b82f6}
+      .rt{fill:#f0fdf4;stroke:#16a34a}
+      .lb{fill:#faf5ff;stroke:#9333ea}
+      .cf{fill:#fffbeb;stroke:#d97706}
+      .db{fill:#fef2f2;stroke:#dc2626}
+      .g{stroke:#94a3b8;stroke-width:1.2;fill:none;marker-end:url(#a)}
+      .f{stroke:#ea580c;stroke-width:2.2;fill:none;marker-end:url(#o)}
+      .n{font-size:11px;font-weight:700;fill:#fff}
+    </style>
+  </defs>
+
+  <rect width="1200" height="930" fill="#ffffff"/>
+  <text x="20" y="34" font-size="22" font-weight="700" fill="#0f172a">ShopLedger — architecture</text>
+  <text x="20" y="54" class="s">Node.js + Express 4 · vanilla JS front end · single JSON file database. Orange = the "place an order" flow (numbered steps below).</text>
+
+  <!-- column headers -->
+  <text x="20" y="88" class="h">BROWSER UI</text>
+  <text x="290" y="88" class="h">SERVER  (server.js + routes/)</text>
+  <text x="610" y="88" class="h">DOMAIN MODULES  (lib/)</text>
+  <text x="900" y="88" class="h">CONFIG &amp; DATA</text>
+
+  <!-- UI -->
+  <rect x="20" y="100" width="230" height="400" rx="8" class="ui" stroke-width="1.5"/>
+  <text x="34" y="124" class="t">public/index.html</text>
+  <text x="34" y="140" class="t">public/js/app.js</text>
+  <text x="34" y="156" class="s">Single page, 4 tabs, XHR to /api</text>
+  <rect x="34" y="170" width="202" height="62" rx="5" fill="#fff" stroke="#93c5fd"/>
+  <text x="44" y="188" class="t" font-size="12">New Order (POS)</text>
+  <text x="44" y="204" class="m">GET /api/products, /customers</text>
+  <text x="44" y="218" class="m">POST /api/pricing/preview</text>
+  <text x="44" y="230" class="m">POST /api/orders</text>
+  <rect x="34" y="242" width="202" height="62" rx="5" fill="#fff" stroke="#93c5fd"/>
+  <text x="44" y="260" class="t" font-size="12">Order History</text>
+  <text x="44" y="276" class="m">GET /api/orders?from&amp;to…</text>
+  <text x="44" y="290" class="m">POST /api/orders/:id/cancel</text>
+  <text x="44" y="302" class="m">link /orders/:id/invoice</text>
+  <rect x="34" y="314" width="202" height="50" rx="5" fill="#fff" stroke="#93c5fd"/>
+  <text x="44" y="332" class="t" font-size="12">Customer Khata</text>
+  <text x="44" y="348" class="m">GET /api/customers</text>
+  <text x="44" y="360" class="m">POST /api/customers/:id/settle</text>
+  <rect x="34" y="374" width="202" height="50" rx="5" fill="#fff" stroke="#93c5fd"/>
+  <text x="44" y="392" class="t" font-size="12">GST Audit</text>
+  <text x="44" y="408" class="m">GET /api/reports/gst-recon…</text>
+  <text x="44" y="420" class="m">GET /api/reports/dashboard</text>
+  <text x="34" y="448" class="s">KPI strip on every tab uses</text>
+  <text x="34" y="462" class="m">GET /api/reports/dashboard</text>
+
+  <!-- server.js -->
+  <rect x="290" y="100" width="270" height="62" rx="8" class="rt" stroke-width="1.5"/>
+  <text x="304" y="122" class="t">server.js  (Express app)</text>
+  <text x="304" y="138" class="s">static public/ · mounts routers on /api</text>
+  <text x="304" y="153" class="m">GET /orders/:id/invoice → invoice.render</text>
+
+  <!-- routes -->
+  <rect x="290" y="176" width="270" height="62" rx="8" class="rt" stroke-width="1.5"/>
+  <text x="304" y="196" class="t">routes/products.js</text>
+  <text x="304" y="212" class="m">GET /products · GET /coupons</text>
+  <text x="304" y="228" class="s">uses store, inventory, tax, coupons</text>
+
+  <rect x="290" y="252" width="270" height="92" rx="8" class="rt" stroke-width="2.5" stroke="#ea580c"/>
+  <text x="304" y="272" class="t">routes/orders.js</text>
+  <text x="304" y="288" class="m">GET /orders · GET /orders/:id</text>
+  <text x="304" y="302" class="m">POST /orders  ← place order</text>
+  <text x="304" y="316" class="m">POST /orders/:id/cancel</text>
+  <text x="304" y="334" class="s" style="font-size:10px">uses store, inventory, pricing, coupons, orders, ledger</text>
+
+  <rect x="290" y="358" width="270" height="62" rx="8" class="rt" stroke-width="1.5"/>
+  <text x="304" y="378" class="t">routes/customers.js</text>
+  <text x="304" y="394" class="m">GET /customers · POST /:id/settle</text>
+  <text x="304" y="410" class="s">uses store, ledger</text>
+
+  <rect x="290" y="434" width="270" height="78" rx="8" class="rt" stroke-width="1.5"/>
+  <text x="304" y="454" class="t">routes/reports.js</text>
+  <text x="304" y="470" class="m">GET /reports/dashboard, /gst-recon…</text>
+  <text x="304" y="484" class="m">POST /pricing/preview · GET /admin/export</text>
+  <text x="304" y="500" class="s">uses config, store, reports, pricing, coupons</text>
+
+  <!-- lib -->
+  <g>
+    <rect x="610" y="100" width="240" height="40" rx="6" class="lb"/><text x="622" y="118" class="t">lib/inventory.js</text><text x="622" y="132" class="s">find, sellable = stock − reserved, check, reserve</text>
+    <rect x="610" y="148" width="240" height="40" rx="6" class="lb"/><text x="622" y="166" class="t">lib/coupons.js</text><text x="622" y="180" class="s">validate, discount (maxDiscount cap)</text>
+    <rect x="610" y="196" width="240" height="40" rx="6" class="lb" stroke-width="2.5" stroke="#ea580c"/><text x="622" y="214" class="t">lib/pricing.js</text><text x="622" y="228" class="s">subtotal, per-line discount, GST, totals</text>
+    <rect x="610" y="244" width="240" height="40" rx="6" class="lb"/><text x="622" y="262" class="t">lib/tax.js</text><text x="622" y="276" class="s">rate per item (gstRate → HSN slab → 18%), CGST/SGST</text>
+    <rect x="610" y="292" width="240" height="40" rx="6" class="lb"/><text x="622" y="310" class="t">lib/ledger.js</text><text x="622" y="324" class="s">Khata: charge, reverse, settle, list</text>
+    <rect x="610" y="340" width="240" height="40" rx="6" class="lb"/><text x="622" y="358" class="t">lib/orders.js</text><text x="622" y="372" class="s">add, get, cancel, list (filter + sort)</text>
+    <rect x="610" y="388" width="240" height="40" rx="6" class="lb"/><text x="622" y="406" class="t">lib/dates.js</text><text x="622" y="420" class="s">today (DD/MM/YYYY), normalizeDateKey, FY</text>
+    <rect x="610" y="436" width="240" height="40" rx="6" class="lb"/><text x="622" y="454" class="t">lib/invoice.js</text><text x="622" y="468" class="s">computeInvoiceFigures, render (HTML)</text>
+    <rect x="610" y="484" width="240" height="40" rx="6" class="lb"/><text x="622" y="502" class="t">lib/reports.js</text><text x="622" y="516" class="s">dashboard KPIs, GST reconciliation</text>
+    <rect x="610" y="532" width="240" height="40" rx="6" class="lb"/><text x="622" y="550" class="t">lib/store.js</text><text x="622" y="564" class="s">read / write whole JSON file, audit log</text>
+  </g>
+
+  <!-- config + data -->
+  <rect x="900" y="100" width="280" height="140" rx="8" class="cf" stroke-width="1.5"/>
+  <text x="914" y="122" class="t">config.js</text>
+  <text x="914" y="140" class="s">port · shop details (GSTIN, address)</text>
+  <text x="914" y="156" class="s">tax.defaultRate 18% · tax.hsnSlabs (5/12/18)</text>
+  <text x="914" y="172" class="s">inventory defaults</text>
+  <text x="914" y="188" class="s">coupons: SAVE10, FLAT50, WELCOME,</text>
+  <text x="914" y="204" class="s">WHOLESALE15, DIWALI20 (inactive)</text>
+  <text x="914" y="220" class="s">adminKey (hard-coded)</text>
+  <text x="914" y="234" class="m" style="font-size:9.5px">read by coupons, tax, inventory, invoice</text>
+
+  <rect x="900" y="470" width="280" height="110" rx="8" class="db" stroke-width="1.5"/>
+  <text x="914" y="492" class="t">data/db.json  (tracked in git)</text>
+  <text x="914" y="510" class="s">products (12) · orders (#1001–#1008)</text>
+  <text x="914" y="526" class="s">customers (5) · settlements · auditLog</text>
+  <text x="914" y="542" class="s">nextOrderId · nextSettlementId</text>
+  <text x="914" y="562" class="m" style="font-size:9.5px">read + rewritten whole on every request</text>
+
+  <!-- grey dependencies -->
+  <path class="g" d="M250,140 C270,140 270,131 290,131"/>
+  <path class="g" d="M850,166 C875,166 875,170 900,170"/>
+  <path class="g" d="M850,264 C875,264 875,180 900,180"/>
+  <path class="g" d="M850,118 C875,118 875,150 900,150"/>
+  <path class="g" d="M850,454 C880,454 880,230 900,230"/>
+  <path class="g" d="M560,140 C585,140 585,450 610,450"/>
+  <path class="g" d="M610,500 C595,500 595,470 610,468"/>
+  <path class="g" d="M560,380 C585,380 585,312 610,312"/>
+  <path class="g" d="M560,470 C585,470 585,500 610,502"/>
+  <path class="g" d="M610,360 C590,360 590,404 610,404"/>
+
+  <!-- orange order flow -->
+  <path class="f" d="M236,215 C265,215 260,300 290,300"/>
+  <circle cx="262" cy="258" r="9" fill="#ea580c"/><text x="258.5" y="262" class="n">1</text>
+  <path class="f" d="M560,290 C585,290 585,120 610,120"/>
+  <path class="f" d="M560,296 C588,296 588,168 610,168"/>
+  <path class="f" d="M560,302 C592,302 592,216 610,216"/>
+  <path class="f" d="M850,216 C870,216 870,264 852,264"/>
+  <path class="f" d="M560,308 C588,308 588,312 610,312"/>
+  <path class="f" d="M560,316 C585,316 585,360 610,360"/>
+  <path class="f" d="M560,326 C580,326 580,552 610,552"/>
+  <path class="f" d="M850,552 C875,552 875,525 900,525"/>
+  <circle cx="577" cy="200" r="9" fill="#ea580c"/><text x="573.5" y="204" class="n">2</text>
+  <circle cx="872" cy="240" r="9" fill="#ea580c"/><text x="868.5" y="244" class="n">4</text>
+  <circle cx="886" cy="540" r="9" fill="#ea580c"/><text x="882.5" y="544" class="n">8</text>
+
+  <!-- order flow legend -->
+  <rect x="20" y="600" width="1160" height="310" rx="8" fill="#fff7ed" stroke="#ea580c" stroke-width="1.5"/>
+  <text x="36" y="626" font-size="15" font-weight="700" fill="#9a3412">Placing an order — POST /api/orders (routes/orders.js)</text>
+  <g class="s" font-size="12.5">
+    <text x="36" y="652"><tspan font-weight="700">1.</tspan> POS tab builds a cart (live totals via POST /api/pricing/preview) and sends { items:[{id,qty}], coupon, paymentMode, customerId }.</text>
+    <text x="36" y="676"><tspan font-weight="700">2.</tspan> store.read() loads data/db.json; each item is resolved with inventory.find → line item { id, sku, name, hsn, price, qty }.</text>
+    <text x="36" y="700"><tspan font-weight="700">3.</tspan> inventory.check: sellable = stock − reserved; rejects with 409 if qty ≥ sellable.</text>
+    <text x="36" y="724"><tspan font-weight="700">4.</tspan> pricing.subtotal → coupons.validate (active, minOrder) → pricing.computeTotals: coupon discount (capped) apportioned per line, GST from tax.getRateForItem (HSN slab).</text>
+    <text x="36" y="748"><tspan font-weight="700">5.</tspan> If paymentMode = khata: ledger.chargeOrderToKhata checks the credit limit and adds to customer totalBilled (409 if over limit).</text>
+    <text x="36" y="772"><tspan font-weight="700">6.</tspan> inventory.reserve deducts qty from product.stock.</text>
+    <text x="36" y="796"><tspan font-weight="700">7.</tspan> orders.add appends the order with the pricing totals (subtotal, discount, tax, total); store.appendAudit logs ORDER_CREATED.</text>
+    <text x="36" y="820"><tspan font-weight="700">8.</tspan> store.write rewrites data/db.json; 201 + order JSON back to the UI, which links /orders/:id/invoice.</text>
+  </g>
+  <text x="36" y="852" class="s" font-size="12" fill="#7c2d12">Afterwards: the printable invoice (server.js → lib/invoice.js) and the GST Audit tab (lib/reports.js → lib/invoice.js) recompute figures</text>
+  <text x="36" y="870" class="s" font-size="12" fill="#7c2d12">from the stored line items and compare them with the stored order totals written in step 7.</text>
+  <text x="36" y="896" class="m">No auth on any route except /api/admin/export (?key=config.adminKey). No locking: concurrent requests can overwrite each other's db.json writes.</text>
+</svg>
